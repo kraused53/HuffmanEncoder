@@ -1,13 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* Text Info */
+
+/* Data Structures */
 struct TextInfo {
 	int character_freqs[ 256 ];
 	unsigned char* text;
 	int text_len;
 };
 
+struct BinaryTreeNode {
+	char val;
+	int count;
+	struct BinaryTreeNode* left;
+	struct BinaryTreeNode* right;
+};
+
+struct LinkedListNode {
+	struct BinaryTreeNode* bt_node;
+	struct LinkedListNode* next;
+};
+
+/* Text Info */
 void init_TextInfo( struct TextInfo* ti ) {
 	for ( int i = 0; i < 256; i++ ) {
 		ti->character_freqs[ i ] = 0;
@@ -25,24 +39,44 @@ void calc_char_freqs( struct TextInfo* ti ) {
 	}
 }
 
-/* Binary Tree */
+/* Binary tree operations */
+struct BinaryTreeNode* create_tree_node( int icount, char ival ) {
+	struct BinaryTreeNode* tmp = ( struct BinaryTreeNode* ) malloc( sizeof( struct BinaryTreeNode ) );
+	if ( !tmp ) {
+		return NULL;
+	}
 
-/* Linked Lists */
-struct LinkedListNode {
-	int count;
-	char val;
-	struct LinkedListNode* next;
-};
+	tmp->count = icount;
+	tmp->val = ival;
+	tmp->left = NULL;
+	tmp->right = NULL;
 
+	return tmp;
+}
+
+struct BinaryTreeNode* generate_huffman_tree( struct LinkedListNode* head ) {
+	if ( head == NULL ) {
+		return NULL;
+	}
+
+	if ( head->next == NULL ) {
+
+	}
+}
+
+/* Linked lists operations */
 struct LinkedListNode* create_list_node( int icount, unsigned char ival ) {
 	struct LinkedListNode* tmp = ( struct LinkedListNode* ) malloc( sizeof( struct LinkedListNode ) );
 	if ( !tmp ) {
 		return NULL;
 	}
 
+	// Create tree node for list
+	tmp->bt_node = create_tree_node( icount, ival );
+
 	// Initialize new node
-	tmp->count = icount;
-	tmp->val = ival;
+	tmp->bt_node->count = icount;
+	tmp->bt_node->val = ival;
 	tmp->next = NULL;
 
 	return tmp;
@@ -62,7 +96,7 @@ struct LinkedListNode* append_node_sorted( struct LinkedListNode* head, int c, u
 	}
 
 	// If new node goes before head
-	if ( head->count > new_node->count ) {
+	if ( head->bt_node->count > new_node->bt_node->count ) {
 		new_node->next = head;
 		return new_node;
 	}
@@ -76,7 +110,7 @@ struct LinkedListNode* append_node_sorted( struct LinkedListNode* head, int c, u
 		}
 
 		// If mov->next exists, check to see if it's value is greater than the new value
-		if ( mov->next->count > new_node->count) {
+		if ( mov->next->bt_node->count > new_node->bt_node->count) {
 			break;
 		}
 
@@ -102,10 +136,10 @@ void print_list( struct LinkedListNode* head ) {
 
 	struct LinkedListNode* tmp = head;
 	while ( tmp != NULL ) {
-		if ( ( tmp->val >= 32 ) && ( tmp->val <= 126 ) ) {
-			printf( "[   %c : %4d ]\r\n", tmp->val, tmp->count );
+		if ( ( tmp->bt_node->val >= 32 ) && ( tmp->bt_node->val <= 126 ) ) {
+			printf( "[   %c : %4d ]\r\n", tmp->bt_node->val, tmp->bt_node->count );
 		} else {
-			printf( "[ %3d : %4d ]\r\n", tmp->val, tmp->count );
+			printf( "[ %3d : %4d ]\r\n", tmp->bt_node->val, tmp->bt_node->count );
 		}
 		tmp = tmp->next;
 	}
@@ -193,7 +227,6 @@ int main( void ) {
 
 	print_list( head );
 
-	
 	// Free memory
 	free( to_encode.text );
 	delete_linked_list( head );
