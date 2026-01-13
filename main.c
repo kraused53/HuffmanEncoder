@@ -7,6 +7,8 @@ int character_freqs[ 256 ] = { 0 };
 unsigned char* text;
 int text_len;
 
+/* Binary Tree */
+
 /* Linked Lists */
 struct LinkedListNode {
 	int count;
@@ -83,13 +85,13 @@ void print_list( struct LinkedListNode* head ) {
 	struct LinkedListNode* tmp = head;
 	while ( tmp != NULL ) {
 		if ( ( tmp->val >= 32 ) && ( tmp->val <= 126 ) ) {
-			printf( "[ %c: %d ]->", tmp->val, tmp->count );
+			printf( "[   %c : %4d ]\r\n", tmp->val, tmp->count );
 		} else {
-			printf( "[ %d: %d ]->", tmp->val, tmp->count );
+			printf( "[ %3d : %4d ]\r\n", tmp->val, tmp->count );
 		}
 		tmp = tmp->next;
 	}
-	printf( "NULL\r\n" );
+	printf( "[    NULL    ]\r\n" );
 }
 
 void delete_linked_list( struct LinkedListNode* head ) {
@@ -143,7 +145,9 @@ int main( void ) {
 
 	// calculate character frequencies
 	for ( int i = 0; i < text_len; i++ ) {
-		character_freqs[ ( unsigned char )text[ i ] ]++;
+		if ( text[ i ] != '\0' ) {
+			character_freqs[ ( unsigned char ) text[ i ] ]++;
+		}
 	}
 	
 	// Linked List
