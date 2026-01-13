@@ -68,7 +68,34 @@ int parse_text_file( TextInfo* ti ) {
 	return 0;
 }
 
+/* Linked Lists */
+typedef struct {
+	int count;
+	unsigned char val;
+	struct LinkedListNode* next;
+} LinkedListNode;
 
+LinkedListNode* create_list_node( int icount, unsigned char ival ) {
+	LinkedListNode* tmp = ( LinkedListNode* ) malloc( sizeof( LinkedListNode ) );
+	if ( !tmp ) {
+		return NULL;
+	}
+
+	// Initialize new node
+	tmp->count = icount;
+	tmp->val = ival;
+	tmp->next = NULL;
+
+	return tmp;
+}
+
+LinkedListNode* append_node_sorted( int c, unsigned char v ) {
+	return NULL;
+}
+
+void delete_linked_list( LinkedListNode* head ) {
+
+}
 
 int main( void ) {
 
